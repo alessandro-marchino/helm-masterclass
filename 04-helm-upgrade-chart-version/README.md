@@ -5,12 +5,12 @@
 - We are going to learn some additional flags for `helm search repo` command
 - We are going to Install and Upgrade Helm Releases using Chart Versions
 - In addition, we are going to learn about Helm Rollback
-- helm install
-- helm search repo
-- helm status
-- helm upgrade
-- helm rollback
-- helm history
+- `helm install`
+- `helm search repo`
+- `helm status`
+- `helm upgrade`
+- `helm rollback`
+- `helm history`
 
 ## Step-02: Search Helm Repo for mychart2
 
