@@ -1,4 +1,4 @@
-# Helm Development - Flow Control If-Else
+# Helm Development - Flow Control If-Else with Boolean Check and "AND Function"
 
 ## Step-01: Introduction
 
@@ -25,20 +25,21 @@
 # If, else if, else
 myapp:
   env: prod
+  retail:
+    enableFeature: true
 ```
-
 
 ## Step-03: Logic and Flow Control Function: and
 
 - [Logic and Flow Control Functions](https://helm.sh/docs/chart_template_guide/function_list/#logic-and-flow-control-functions)
-- **eq:**  Returns the boolean equality of the arguments (e.g., Arg1 == Arg2).
+- **and:**  Returns the boolean AND of two or more arguments (the first empty argument, or the last argument).
 
 ```yaml
 # and Syntax
-eq .Arg1 .Arg2
+and .Arg1 .Arg2
 ```
 
-## Step-04: Implement if-else for replicas
+## Step-04: Implement if-else for replicas with Boolean
 
 ```yaml
 apiVersion: apps/v1
@@ -48,7 +49,9 @@ metadata:
   labels:
     app: nginx
 spec:
-{{- if eq .Values.myapp.env "prod" }}
+{{- if and .Values.myapp.retail.enableFeature (eq .Values.myapp.env "prod") }}
+  replicas: 6
+{{- else if eq .Values.myapp.env "prod" }}
   replicas: 4
 {{- else if eq .Values.myapp.env "qa" }}
   replicas: 2
@@ -76,23 +79,17 @@ spec:
 # Change to Chart Directory
 cd helmbasics
 
-# Helm Template (when env: prod from values.yaml)
-## TEST IF STATEMENT
-helm template myapp1 .
-
-# Helm Template (when env: qa using --set)
-## TEST ELSE IF STATEMENT
+# Helm Template
+helm template myapp1 . --set myapp.retail.enableFeature=true
+helm template myapp1 . --set myapp.retail.enableFeature=false
 helm template myapp1 . --set myapp.env=qa
-
-# Helm Template (when env: dev or env: null using --set)
-## TEST ELSE STATEMENT
 helm template myapp1 . --set myapp.env=dev
 
 # Helm Install Dry-run
-helm install myapp1 . --dry-run
+helm install myapp1 . --set myapp.retail.enableFeature=true --dry-run
 
 # Helm Install
-helm install myapp1 . --atomic
+helm install myapp1 . --set myapp.retail.enableFeature=true --atomic
 
 # Verify Pods
 helm status myapp1 --show-resources
