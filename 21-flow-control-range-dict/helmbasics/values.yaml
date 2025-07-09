@@ -1,0 +1,12 @@
+# For testing Flow Control: with Block - Scope more detailed
+myapps:
+  config1:
+    appName: myapp1
+    appType: webserver
+    appTech: HTML
+    appDb: mysql
+  config2:
+    appName: myapp2
+    appType: webserver
+    appTech: HTML
+    appDb: mysql
